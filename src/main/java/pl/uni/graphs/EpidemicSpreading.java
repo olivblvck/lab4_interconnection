@@ -143,7 +143,7 @@ public class EpidemicSpreading {
         System.out.println("6 - HighlyContagious     (pi=0.30, pr=0.04, T=20)");
         System.out.println("7 - IsolatedClusters     (pi=0.08, pr=0.12, T=50)");
         System.out.println("8 - RealisticFlu         (pi=0.20, pr=0.10, T=40)"); // uses REDUCED = 40
-        System.out.println("9 - FullOutbreakThenStop (pi=0.25, pr=0.08, T=600)");
+        System.out.println("9 - FullOutbreakThenStop (pi=0.35, pr=0.04, T=600)");
 
         System.out.print("Enter preset number [1-9]: ");
 

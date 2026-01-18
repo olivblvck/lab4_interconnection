@@ -70,10 +70,10 @@ public class EpidemicConfigPresets {
     }
 
     // PRESET 9: FullOutbreakThenStop - Type (i)
-// High transmission + long immunity (no reinfections during the run)
+    // High transmission + long immunity (no reinfections during the run)
     public static class FullOutbreakThenStop {
-        public static final double INFECTION_PROBABILITY = 0.25; // pi
-        public static final double RECOVERY_PROBABILITY = 0.08;  // pr
+        public static final double INFECTION_PROBABILITY = 0.35; // pi
+        public static final double RECOVERY_PROBABILITY = 0.04;  // pr
         public static final int IMMUNITY_DURATION = 600;         // T > MAX_ITERATIONS (500)
     }
 
