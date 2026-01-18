@@ -29,7 +29,7 @@ public class Tools {
     public final static void hitakey(String message) {
         System.out.println("-----------------------");
         System.out.println(message);
-        System.out.println("----- Press ENTER to continue -----");
+        System.out.println("----- Press Enter to continue -----");
 
         try {
             System.in.read();
