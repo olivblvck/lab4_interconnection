@@ -11,21 +11,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * SIR Epidemic Model using Cellular Automata on a Torus Graph.
- * Lab 4 - Epidemic Spreading on Graphs with Cellular Automata.
- *
- * States:
- * S - Susceptible (blue)
- * I - Infected (red)
- * R - Recovered/Immune (green)
- */
+
+
+ // S - Susceptible (blue)
+ //I - Infected (red)
+ //R - Recovered/Immune (green)
+
+
+
 public class EpidemicSpreading {
 
     private final int GRID_SIZE = 60;
-    private final double INFECTION_PROBABILITY = 0.15;
-    private final double RECOVERY_PROBABILITY = 0.05;
-    private final int IMMUNITY_DURATION = 30;
+    private double INFECTION_PROBABILITY = 0.15; //pi
+    private double RECOVERY_PROBABILITY = 0.05; //pr
+    private int IMMUNITY_DURATION = 30; //T
     private final int DELAY = 50;
     private final int MAX_ITERATIONS = 500;
 
@@ -68,28 +67,27 @@ public class EpidemicSpreading {
         recoveredCount = new ArrayList<Integer>();
         currentIteration = 0;
 
-        System.out.println("\n╔════════════════════════════════════════════════════════════╗");
-        System.out.println("║   LAB 4 - EPIDEMIC SPREADING ON 2D GRID (60x60)           ║");
-        System.out.println("║   Cellular Automata - Torus                               ║");
-        System.out.println("╚════════════════════════════════════════════════════════════╝");
+        System.out.println("\n LAB 4 - EPIDEMIC SPREADING ON 2D GRID (60x60)\n");
+        String presetName = choosePresetFromConsole();
+        System.out.println("\nSelected preset: " + presetName +
+                " | pi=" + INFECTION_PROBABILITY +
+                ", pr=" + RECOVERY_PROBABILITY +
+                ", T=" + IMMUNITY_DURATION);
+
 
         // Simulation 1: Von Neumann
-        System.out.println("\n╔════════════════════════════════════════════════════════════╗");
-        System.out.println("║   SIMULATION 1: VON NEUMANN NEIGHBORHOOD (4 neighbors)     ║");
-        System.out.println("╚════════════════════════════════════════════════════════════╝");
+        System.out.println("\nSIMULATION 1: VON NEUMANN NEIGHBORHOOD (4 neighbors)\n");
         runSimulation(NeighborhoodType.VON_NEUMANN);
 
         vonNeumannSusceptible = new ArrayList<Integer>(susceptibleCount);
         vonNeumannInfected = new ArrayList<Integer>(infectedCount);
         vonNeumannRecovered = new ArrayList<Integer>(recoveredCount);
 
-        Tools.hitakey("Simulation 1 complete. Press ENTER to start Simulation 2...");
+        Tools.hitakey("Simulation 1 complete. Press enter to start simulation 2...");
 
         // Simulation 2: Moore
         resetSimulation();
-        System.out.println("\n╔════════════════════════════════════════════════════════════╗");
-        System.out.println("║   SIMULATION 2: MOORE NEIGHBORHOOD (8 neighbors)           ║");
-        System.out.println("╚════════════════════════════════════════════════════════════╝");
+        System.out.println("\nSIMULATION 2: MOORE NEIGHBORHOOD (8 neighbors)\n");
         runSimulation(NeighborhoodType.MOORE);
 
         mooreSusceptible = new ArrayList<Integer>(susceptibleCount);
@@ -97,20 +95,20 @@ public class EpidemicSpreading {
         mooreRecovered = new ArrayList<Integer>(recoveredCount);
 
         // Charts: sequential + user-controlled
-        Tools.hitakey("Simulation 2 complete. Press ENTER to display the Von Neumann chart...");
+        Tools.hitakey("Simulation 2 complete. Press Enter to display the Von Neumann chart...");
         JFrame vnFrame = EpidemicDataExporter.showChart(
                 "VON_NEUMANN", vonNeumannSusceptible, vonNeumannInfected, vonNeumannRecovered
         );
         safeSleep(200);
-        Tools.hitakey("Von Neumann chart opened. Press ENTER to close it and continue...");
+        Tools.hitakey("Von Neumann chart opened. Press Enter to close it and continue...");
         if (vnFrame != null) vnFrame.dispose();
 
-        Tools.hitakey("Press ENTER to display the Moore chart...");
+        Tools.hitakey("Press Enter to display the Moore chart...");
         JFrame mooreFrame = EpidemicDataExporter.showChart(
                 "MOORE", mooreSusceptible, mooreInfected, mooreRecovered
         );
         safeSleep(200);
-        Tools.hitakey("Moore chart opened. Press ENTER to close it and exit...");
+        Tools.hitakey("Moore chart opened. Press Enter to close it and exit...");
         if (mooreFrame != null) mooreFrame.dispose();
 
         System.exit(0);
@@ -124,9 +122,108 @@ public class EpidemicSpreading {
         }
     }
 
-    /**
-     * Initialize 2D grid graph (60x60 torus).
-     */
+
+    //Apply preset values to simulation parameters (pi, pr, T)
+    private void applyPreset(double pi, double pr, int t) {
+        INFECTION_PROBABILITY = pi;
+        RECOVERY_PROBABILITY = pr;
+        IMMUNITY_DURATION = t;
+    }
+
+    //Console menu for selecting a preset by number
+    private String choosePresetFromConsole() {
+        java.util.Scanner sc = new java.util.Scanner(System.in);
+
+        System.out.println("\n-----PRESET SELECTION----- ");
+        System.out.println("1 - AggressiveEpidemic   (pi=0.25, pr=0.02, T=25)");
+        System.out.println("2 - ModerateEpidemic     (pi=0.12, pr=0.08, T=35)");
+        System.out.println("3 - WeakEpidemic         (pi=0.06, pr=0.15, T=60)");
+        System.out.println("4 - EndemicEpidemic      (pi=0.18, pr=0.03, T=15)");
+        System.out.println("5 - LabDefaults          (pi=0.15, pr=0.05, T=30)");
+        System.out.println("6 - HighlyContagious     (pi=0.30, pr=0.04, T=20)");
+        System.out.println("7 - IsolatedClusters     (pi=0.08, pr=0.12, T=50)");
+        System.out.println("8 - RealisticFlu         (pi=0.20, pr=0.10, T=40)"); // uses REDUCED = 40
+        System.out.println("9 - FullOutbreakThenStop (pi=0.25, pr=0.08, T=600)");
+
+        System.out.print("Enter preset number [1-9]: ");
+
+        int choice;
+        try {
+            choice = Integer.parseInt(sc.nextLine().trim());
+        } catch (Exception e) {
+            choice = 5; // default
+        }
+
+        switch (choice) {
+            case 1:
+                applyPreset(
+                        EpidemicConfigPresets.AggressiveEpidemic.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.AggressiveEpidemic.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.AggressiveEpidemic.IMMUNITY_DURATION
+                );
+                return "Aggressive";
+            case 2:
+                applyPreset(
+                        EpidemicConfigPresets.ModerateEpidemic.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.ModerateEpidemic.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.ModerateEpidemic.IMMUNITY_DURATION
+                );
+                return "Moderate";
+            case 3:
+                applyPreset(
+                        EpidemicConfigPresets.WeakEpidemic.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.WeakEpidemic.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.WeakEpidemic.IMMUNITY_DURATION
+                );
+                return "Weak";
+            case 4:
+                applyPreset(
+                        EpidemicConfigPresets.EndemicEpidemic.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.EndemicEpidemic.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.EndemicEpidemic.IMMUNITY_DURATION
+                );
+                return "Endemic";
+            case 6:
+                applyPreset(
+                        EpidemicConfigPresets.HighlyContagious.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.HighlyContagious.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.HighlyContagious.IMMUNITY_DURATION
+                );
+                return "HighlyContagious";
+            case 7:
+                applyPreset(
+                        EpidemicConfigPresets.IsolatedClusters.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.IsolatedClusters.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.IsolatedClusters.IMMUNITY_DURATION
+                );
+                return "IsolatedClusters";
+            case 8:
+                applyPreset(
+                        EpidemicConfigPresets.RealisticFlu.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.RealisticFlu.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.RealisticFlu.IMMUNITY_DURATION_REDUCED
+                );
+                return "RealisticFlu";
+            case 9:
+                applyPreset(
+                        EpidemicConfigPresets.FullOutbreakThenStop.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.FullOutbreakThenStop.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.FullOutbreakThenStop.IMMUNITY_DURATION
+                );
+                return "FullOutbreakThenStop";
+            case 5:
+            default:
+                applyPreset(
+                        EpidemicConfigPresets.LabDefaults.INFECTION_PROBABILITY,
+                        EpidemicConfigPresets.LabDefaults.RECOVERY_PROBABILITY,
+                        EpidemicConfigPresets.LabDefaults.IMMUNITY_DURATION
+                );
+                return "LabDefaults";
+        }
+    }
+
+
+    // initialize 2D grid graph (60x60 torus)
     private void initializeGraph() {
         graph = new SingleGraph("Epidemic Spreading Torus");
         graph.setAutoCreate(false);
@@ -146,15 +243,13 @@ public class EpidemicSpreading {
         addVonNeumannEdges();
     }
 
-    /**
-     * Add Von Neumann neighborhood edges (4 neighbors).
-     */
+    // Add Von Neumann neighborhood edges (4 neighbors)
     private void addVonNeumannEdges() {
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 String nodeId = i + "_" + j;
 
-                // Right neighbor (torus wrapping)
+                // Right neighbor
                 int right = (j + 1) % GRID_SIZE;
                 String rightId = i + "_" + right;
                 String edgeId = nodeId + "_" + rightId;
@@ -162,7 +257,7 @@ public class EpidemicSpreading {
                     graph.addEdge(edgeId, nodeId, rightId);
                 }
 
-                // Down neighbor (torus wrapping)
+                // Down neighbor
                 int down = (i + 1) % GRID_SIZE;
                 String downId = down + "_" + j;
                 String edgeId2 = nodeId + "_" + downId;
@@ -173,17 +268,13 @@ public class EpidemicSpreading {
         }
     }
 
-    /**
-     * Switch from Von Neumann to Moore neighborhood.
-     */
+    //Switch from Von Neumann to Moore neighborhood
     private void switchToMooreNeighborhood() {
         removeAllEdges();
         addMooreEdges();
     }
 
-    /**
-     * Remove all edges from graph.
-     */
+    //Remove all edges from graph
     private void removeAllEdges() {
         List<String> edgesToRemove = new ArrayList<String>();
         for (Object edgeObj : graph.getEdgeSet()) {
@@ -195,9 +286,7 @@ public class EpidemicSpreading {
         }
     }
 
-    /**
-     * Add Moore neighborhood edges (8 neighbors including diagonals).
-     */
+    // Add Moore neighborhood edges (8 neighbors including diagonals)
     private void addMooreEdges() {
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
@@ -221,9 +310,7 @@ public class EpidemicSpreading {
         }
     }
 
-    /**
-     * Initialize state grids.
-     */
+    // Initialize state grids
     private void initializeGrids() {
         grid = new State[GRID_SIZE][GRID_SIZE];
         infectedTime = new int[GRID_SIZE][GRID_SIZE];
@@ -247,9 +334,7 @@ public class EpidemicSpreading {
         System.out.println("\nInitial infected person at position: (" + startI + ", " + startJ + ")");
     }
 
-    /**
-     * Reset for next simulation.
-     */
+    // Reset for next simulation
     private void resetSimulation() {
         switchToMooreNeighborhood();
         initializeGrids();
@@ -259,9 +344,7 @@ public class EpidemicSpreading {
         currentIteration = 0;
     }
 
-    /**
-     * Setup graph visualization styles.
-     */
+    // Setup graph visualization styles
     private void setupStyles() {
         String styleSheet =
                 "graph { fill-color: white; }" +
@@ -275,9 +358,7 @@ public class EpidemicSpreading {
         graph.addAttribute("ui.antialias", true);
     }
 
-    /**
-     * Update node visualization color based on state.
-     */
+    // update node visualization color based on state
     private void updateNodeVisualization(int i, int j) {
         String nodeId = i + "_" + j;
         Node node = graph.getNode(nodeId);
@@ -298,9 +379,7 @@ public class EpidemicSpreading {
         }
     }
 
-    /**
-     * Get neighbors based on neighborhood type.
-     */
+    //get neighbors based on neighborhood type
     private List<int[]> getNeighbors(int i, int j, NeighborhoodType neighborhood) {
         List<int[]> neighbors = new ArrayList<int[]>();
 
@@ -324,9 +403,7 @@ public class EpidemicSpreading {
         return neighbors;
     }
 
-    /**
-     * Perform one cellular automaton step.
-     */
+    // Perform one cellular automaton step
     private void simulationStep(NeighborhoodType neighborhood) {
         State[][] newGrid = new State[GRID_SIZE][GRID_SIZE];
         for (int i = 0; i < GRID_SIZE; i++) {
@@ -375,9 +452,7 @@ public class EpidemicSpreading {
         currentIteration++;
     }
 
-    /**
-     * Update statistics and visualization.
-     */
+    // Update statistics and visualization
     private void updateStatistics() {
         int s = 0, i = 0, r = 0;
 
@@ -406,9 +481,7 @@ public class EpidemicSpreading {
         recoveredCount.add(r);
     }
 
-    /**
-     * Check if epidemic has ended (no infected remain).
-     */
+    // check if epidemic has ended (no infected remain)
     private boolean epidemicEnded() {
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
@@ -418,19 +491,17 @@ public class EpidemicSpreading {
         return true;
     }
 
-    /**
-     * Run a complete simulation.
-     */
+    // run a complete simulation
     private void runSimulation(NeighborhoodType neighborhood) {
         System.out.println("\nStarting simulation with neighborhood: " + neighborhood);
         System.out.println("Parameters: pi=" + INFECTION_PROBABILITY +
                 ", pr=" + RECOVERY_PROBABILITY +
                 ", T=" + IMMUNITY_DURATION);
 
-        System.out.println("\n>>> SIMULATION WINDOW OPENED <<<");
-        System.out.println(">>> BLUE = Susceptible | RED = Infected | GREEN = Recovered <<<\n");
+        System.out.println("\n---SIMULATION WINDOW OPENED ---");
+        System.out.println("--- BLUE = Susceptible ; RED = Infected ; GREEN = Recovered ---\n");
 
-        // Show graph (fixed coordinates, no auto-layout)
+        // show graph
         viewer = graph.display(false);
 
         int iteration = 0;
@@ -452,14 +523,9 @@ public class EpidemicSpreading {
         printStatistics(neighborhood);
     }
 
-    /**
-     * Print detailed statistics and save CSV/PNG.
-     * IMPORTANT: no chart display here (charts are displayed after both simulations).
-     */
+    // print detailed statistics and save csv/png
     private void printStatistics(NeighborhoodType neighborhood) {
-        System.out.println("\n========================================");
-        System.out.println("SIMULATION COMPLETE");
-        System.out.println("========================================");
+        System.out.println("\n---SIMULATION COMPLETE---\n");
         System.out.println("Neighborhood type: " + neighborhood);
         System.out.println("Total iterations: " + currentIteration);
 
@@ -476,11 +542,11 @@ public class EpidemicSpreading {
 
             System.out.println("\n--- EPIDEMIC CLASSIFICATION ---");
             if (susceptibleCount.get(susceptibleCount.size() - 1) == 0) {
-                System.out.println("Type (i): Infected all, stopped ✓");
+                System.out.println("Type (i): Infected all, stopped");
             } else if (infectedCount.get(infectedCount.size() - 1) == 0) {
-                System.out.println("Type (ii): Stopped, didn't infect all ✓");
+                System.out.println("Type (ii): Stopped, didn't infect all");
             } else {
-                System.out.println("Type (iii): Never stops (endemic) ✓");
+                System.out.println("Type (iii): Never stops (endemic)");
             }
 
             String filename;

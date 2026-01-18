@@ -11,15 +11,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * CSV export and XChart visualization utility for Epidemic Spreading data.
- * Generates both CSV files and PNG plots for SIR model results.
- */
+// CSV export and chart visualization
 public class EpidemicDataExporter {
 
-    /**
-     * Export epidemic statistics to a CSV file.
-     */
+    //export epidemic statistics to a csv file
     public static void saveToCsv(String filename,
                                  List<Integer> susceptible,
                                  List<Integer> infected,
@@ -34,17 +29,14 @@ public class EpidemicDataExporter {
                         recovered.get(t) + "\n");
             }
 
-            System.out.println("✓ CSV saved: " + filename);
+            System.out.println("CSV saved: " + filename);
         } catch (IOException e) {
             System.err.println("ERROR: Cannot save CSV: " + filename);
             throw e;
         }
     }
 
-    /**
-     * Create and save epidemic chart as a PNG image.
-     * Shows S(t), I(t), R(t) curves over time.
-     */
+    // create and save epidemic chart as a PNG image - shows S(t), I(t), R(t) curves over time
     public static void saveChartAsPNG(String filename,
                                       String title,
                                       List<Integer> susceptible,
@@ -53,17 +45,14 @@ public class EpidemicDataExporter {
         try {
             XYChart chart = buildChart(title, susceptible, infected, recovered);
             BitmapEncoder.saveBitmap(chart, filename, BitmapEncoder.BitmapFormat.PNG);
-            System.out.println("✓ PNG saved: " + filename);
+            System.out.println("PNG saved: " + filename);
         } catch (IOException e) {
             System.err.println("ERROR: Cannot save PNG: " + filename);
             e.printStackTrace();
         }
     }
 
-    /**
-     * Display epidemic chart in an interactive window.
-     * Returns the created JFrame (so it can be disposed later if desired).
-     */
+    //Display epidemic chart in an interactive window
     public static JFrame showChart(String title,
                                    List<Integer> susceptible,
                                    List<Integer> infected,
@@ -74,13 +63,13 @@ public class EpidemicDataExporter {
             JFrame frame = (JFrame) new SwingWrapper(chart).displayChart();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-            // Try to bring the window to front (helps on macOS)
+            // bring the window to front (macOS)
             frame.setAlwaysOnTop(true);
             frame.toFront();
             frame.requestFocus();
             frame.setAlwaysOnTop(false);
 
-            System.out.println("✓ Chart displayed in a window");
+            System.out.println("Chart displayed in a window");
             return frame;
 
         } catch (Exception e) {
@@ -90,9 +79,7 @@ public class EpidemicDataExporter {
         }
     }
 
-    /**
-     * Build a chart with English labels (used for both PNG export and GUI).
-     */
+    // Build a chart
     private static XYChart buildChart(String title,
                                       List<Integer> susceptible,
                                       List<Integer> infected,
