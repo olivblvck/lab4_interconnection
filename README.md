@@ -1,4 +1,4 @@
-# Lab 4 — Epidemic Spreading
+# Lab 4 - Epidemic Spreading
 
 This project implements an epidemic spreading model on a 60×60 2D torus using a cellular automaton and GraphStream visualization. 
 At each time step, infected agents may infect neighbors with probability `pi`, recover with probability `pr` (cumulative recovery probability \(1-(1-pr)^k\) after `k` steps), and recovered agents stay immune for `T` steps before becoming susceptible again (reinfection is possible).
@@ -26,11 +26,11 @@ Outputs (saved in the project directory):
 
 ## Results (plots in-table)
 
-| Preset | Parameters (pi, pr, T) | Von Neumann (classification + plot)                                                                                                    | Moore (classification + plot)                                                                                    |
-|---|---:|----------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| 2 — ModerateEpidemic | (0.12, 0.08, 35) | Type (ii) — stops with S>0. <br><img src="readme_files/epidemic_vonNeumann_preset2.png" width="420">                                   | Type (ii) — stops with S>0. <br><img src="readme_files/epidemic_moore_preset2.png" width="420">                  |
-| 4 — EndemicEpidemic | (0.18, 0.03, 15) | Type (iii) — endemic (I>0). <br><img src="readme_files/epidemic_vonNeumann_preset4.png" width="420">                                   | Type (iii) — endemic (I>0). <br><img src="readme_files/epidemic_moore_preset4.png" width="420">                  |
-| 9 — FullOutbreakThenStop | (0.25, 0.08, 600) | Type (ii) — often stops with a small leftover S (stochastic). <br><img src="readme_files/epidemic_vonNeumann_preset9.png" width="420"> | Type (i) — infects all and stops (S=0, I=0). <br><img src="readme_files/epidemic_moore_preset9.png" width="420"> |
+| Preset                   | Parameters (pi, pr, T) | Von Neumann (classification + plot)                                                                                                    | Moore (classification + plot)                                                                                    |
+|--------------------------|---:|----------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| 2 - ModerateEpidemic     | (0.12, 0.08, 35) | Type (ii) - stops with S>0. <br><img src="readme_files/epidemic_vonNeumann_preset2.png" width="420">                                   | Type (ii) - stops with S>0. <br><img src="readme_files/epidemic_moore_preset2.png" width="420">                  |
+| 4 - EndemicEpidemic      | (0.18, 0.03, 15) | Type (iii) - endemic (I>0). <br><img src="readme_files/epidemic_vonNeumann_preset4.png" width="420">                                   | Type (iii) - endemic (I>0). <br><img src="readme_files/epidemic_moore_preset4.png" width="420">                  |
+| 9 - FullOutbreakThenStop | (0.25, 0.08, 600) | Type (ii) - often stops with a small leftover S (stochastic). <br><img src="readme_files/epidemic_vonNeumann_preset9.png" width="420"> | Type (i) - infects all and stops (S=0, I=0). <br><img src="readme_files/epidemic_moore_preset9.png" width="420"> |
 
 Notes:
 - Moore often spreads faster/stronger than Von Neumann because each cell has more contacts per step. 
