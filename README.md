@@ -24,7 +24,8 @@ Outputs (saved in the project directory):
 - CSV: `epidemic_vonNeumann.csv`, `epidemic_moore.csv`
 - PNG: `epidemic_vonNeumann.png`, `epidemic_moore.png`
 
-## Results (plots in-table)
+## Results
+<br><img src="readme_files/epidemic.gif" width="50%" height="50%">
 
 | Preset                   | Parameters (pi, pr, T) | Von Neumann (classification + plot)                                                                                                           | Moore (classification + plot)                                                                                                  |
 |--------------------------|-----------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
